@@ -1,0 +1,75 @@
+.btn {
+  flex: 0 0 40px;
+  height: 40px;
+  border: 1px solid;
+  border-radius: 50%;
+  background-color: white;
+  outline: none;
+}
+
+.btn::after {
+  content: '';
+  position: relative;
+  display: block;
+  width: 70%;
+  height: 70%;
+  left: 50%;
+  transform: translateX(-50%);
+
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.btn:hover {
+  cursor: pointer;
+}
+
+.form-media__btn-audio::after {
+  background-image: url('../img/mic.svg');
+}
+
+.form-media__btn-video::after {
+  background-image: url('../img/video.svg');
+}
+
+.btn-start {
+  border-color: var(--color-blue-48);
+}
+
+.btn-start:focus,
+.btn-start:hover {
+  box-shadow: 0 0 5px 0 var(--color-blue-48);
+}
+
+.form-media__btn-send {
+  border-color: var(--color-green);
+}
+
+.form-media__btn-send::after {
+  width: 60%;
+  height: 60%;
+  background-image: url('../img/ok.svg');
+
+  transform: translateX(-45%);
+}
+
+.form-media__btn-send:focus,
+.form-media__btn-send:hover {
+  box-shadow: 0 0 5px 0 var(--color-green);
+}
+
+.form-media__btn-cancel {
+  border-color: var(--color-gray);
+}
+
+.form-media__btn-cancel::after {
+  width: 50%;
+  height: 50%;
+  background-image: url('../img/cancel.svg');
+}
+
+.form-media__btn-cancel:focus,
+.form-media__btn-cancel:hover {
+  box-shadow: 0 0 5px 0 var(--color-gray);
+}

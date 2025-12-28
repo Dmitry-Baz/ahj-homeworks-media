@@ -1,0 +1,26 @@
+<div class="modal-container _hidden">
+	<div class="modal modal-coords">
+		<header class="modal__header">
+			<div class="modal__title">Что-то пошло не так</div>
+		</header>
+		<div class="modal__body">
+			<p class="modal__text"></p>
+		</div>
+		<footer class="modal__footer">
+			<form class="form-modal" novalidate>
+				<div class="form-modal__data">
+					<label for="user-coords" class="form-modal__label">Широта и долгота через запятую:</label>
+					<div class="form-modal__input-wrap">
+						<input class="form-modal__input" id="user-coords" name="coords" placeholder="xx.xxxxx, xx.xxxxx">
+						<div class="form-modal__err-msg _hidden"></div>
+					</div>
+				</div>
+				<div class="modal__control">
+					<button class="modal__btn form-modal__btn-send">Опубликовать</button>
+					<button class="modal__btn form-modal__btn-send-no-coords">Опубликовать без координат</button>
+					<button class="modal__btn modal__btn-cancel">Не публиковать</button>
+				</div>
+			</form>
+		</footer>
+	</div>
+</div>

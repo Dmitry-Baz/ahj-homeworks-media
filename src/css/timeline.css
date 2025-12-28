@@ -1,0 +1,96 @@
+/*
+  Стили влияющие на внешнее окружение (отступы, позиционирование)
+  задаем только элементам, а не блокам.
+ */
+
+:root {
+  --color-blue-48: #3f51b5;
+  --color-blue-43: #3949a2;
+  --color-green: #4caf50;
+  --color-gray: #9e9e9e;
+}
+
+.timeline {
+}
+
+.timeline__body {
+  padding-bottom: 137px; /* Высота подвала */
+}
+
+/* Timeline footer */
+
+.timeline__footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+
+  width: 100%;
+  background-color: white;
+  padding: 20px 0;
+}
+
+.user-panel {
+  border: 2px solid var(--color-blue-48);
+  border-radius: 15px;
+  background-color: white;
+  padding: 15px;
+}
+
+.user-panel__video-wrap {
+  border: 2px solid var(--color-blue-48);
+  border-radius: 15px;
+  margin-bottom: 15px;
+  overflow: hidden;
+}
+
+.user-panel__video {
+  max-width: 100%;
+  vertical-align: bottom;
+}
+
+.user-panel__control {
+  display: flex;
+  align-items: center;
+}
+
+.user-panel__form-text {
+  flex: 1 1 auto;
+  margin-right: 15px;
+}
+
+.user-panel__input {
+  vertical-align: bottom;
+  width: 100%;
+  border: 1px solid var(--color-blue-48);
+  border-radius: 5px;
+  padding: 8px;
+  resize: vertical;
+  outline: none;
+  box-shadow: inset 0 0 3px 0 var(--color-blue-48)
+}
+
+.user-panel__input:focus {
+  box-shadow: inset 0 0 5px 0 var(--color-blue-48);
+}
+
+.user-panel__form-media {
+  flex: 0 0 130px;
+}
+
+.form-media__start,
+.form-media__stop {
+  display: flex;
+}
+
+.form-media__start {
+  justify-content: space-around;
+}
+
+.form-media__stop {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.form-media__duration {
+  font-family: 'Arial Narrow', sans-serif;
+}

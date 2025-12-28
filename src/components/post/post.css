@@ -1,0 +1,60 @@
+.timeline__post {
+  margin-bottom: 20px;
+}
+
+.post {
+  border: 1px solid lightgray;
+  border-radius: 15px;
+  padding: 15px;
+}
+
+.post__body {
+  margin-bottom: 15px;
+}
+
+.post__body audio {
+  width: 100%;
+}
+
+.post__body video {
+  max-width: 100%;
+  vertical-align: bottom;
+}
+
+.post__video {
+  text-align: center;
+}
+
+.post__text {
+  font-family: 'Arial Narrow', sans-serif;
+  font-size: 20px;
+  text-align: justify;
+}
+
+/* post footer */
+
+.post__footer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.post__coords {
+  position: relative;
+}
+
+.post__coords:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: -2px;
+
+  display: block;
+  width: 20px;
+  height: 100%;
+
+  transform: translateX(100%);
+
+  background-image: url('../../img/geolocation.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+}

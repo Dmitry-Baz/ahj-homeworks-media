@@ -42,5 +42,8 @@
   },
   "dependencies": {
     "core-js": "3.29.1"
+  },
+  "prettier": {
+    "singleQuote": true
   }
 }

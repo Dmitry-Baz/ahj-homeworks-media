@@ -1,5 +1,5 @@
-@import "main.css";
-@import "timeline.css";
-@import "../components/post/post.css";
-@import "btn.css";
-@import "utility.css";
+@import 'main.css';
+@import 'timeline.css';
+@import '../components/post/post.css';
+@import 'btn.css';
+@import 'utility.css';

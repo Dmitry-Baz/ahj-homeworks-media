@@ -19,7 +19,7 @@ describe('ModalCoords', () => {
       '1.12345, 123.12345',
       '1.123, 2.12345',
       '1.12345 2.123',
-    ])('\'%s\'', (coords) => {
+    ])("'%s'", (coords) => {
       _.els.input.value = coords;
       _.els.btnSend.click();
       expect(_.els.errMsg.classList.contains('_hidden')).toBeFalsy();
@@ -39,7 +39,7 @@ describe('ModalCoords', () => {
       '[12.12345, 21.23456]',
       '[-12.12345, -21.23456]',
       '[12.1234567, 21.2345678]',
-    ])('\'%s\'', async (coords) => {
+    ])("'%s'", async (coords) => {
       _.show('');
       setTimeout(() => {
         _.els.input.value = coords;
@@ -53,11 +53,11 @@ describe('ModalCoords', () => {
 
   describe('should return object with coordinates, if user enter:', () => {
     test.each`
-    latitude     | longitude
-    ${12.12345}  | ${23.23456}
-    ${-12.12345} | ${-23.23456}
-    ${1.1234567} | ${2.2345679}
-    `('\'$latitude, $longitude\'', async ({ latitude, longitude }) => {
+      latitude     | longitude
+      ${12.12345}  | ${23.23456}
+      ${-12.12345} | ${-23.23456}
+      ${1.1234567} | ${2.2345679}
+    `("'$latitude, $longitude'", async ({ latitude, longitude }) => {
       const userEnter = `${latitude}, ${longitude}`;
       _.show('');
       setTimeout(() => {

@@ -1,6 +1,6 @@
-import html from "./modal-coords.html";
-import "./modal-coords.css";
-import Modal from "../Modal";
+import html from './modal-coords.html';
+import './modal-coords.css';
+import Modal from '../Modal';
 
 export default class ModalCoords extends Modal {
   #textEl;
@@ -14,24 +14,24 @@ export default class ModalCoords extends Modal {
     super({ html });
     this.#timelineInput = params?.timelineInputEl;
 
-    this.#textEl = this.element.querySelector(".modal__text");
-    this.#input = this.element.querySelector(".form-modal__input");
-    this.#errorMsg = this.element.querySelector(".form-modal__err-msg");
-    this.#btnSend = this.element.querySelector(".form-modal__btn-send");
+    this.#textEl = this.element.querySelector('.modal__text');
+    this.#input = this.element.querySelector('.form-modal__input');
+    this.#errorMsg = this.element.querySelector('.form-modal__err-msg');
+    this.#btnSend = this.element.querySelector('.form-modal__btn-send');
     this.#btnSendNoCoords = this.element.querySelector(
-      ".form-modal__btn-send-no-coords"
+      '.form-modal__btn-send-no-coords'
     );
 
-    this.#input.addEventListener("input", () => this.#hideError());
-    this.#btnSend.addEventListener("click", () => this.#handleSend());
-    this.#btnSendNoCoords.addEventListener("click", () =>
+    this.#input.addEventListener('input', () => this.#hideError());
+    this.#btnSend.addEventListener('click', () => this.#handleSend());
+    this.#btnSendNoCoords.addEventListener('click', () =>
       this.#handleSendWithoutCoords()
     );
   }
 
   showAndAwait(message) {
     this.#textEl.textContent = message;
-    this.#input.value = "";
+    this.#input.value = '';
     this.#hideError();
     this.#input.focus();
     return super.showAndAwait().finally(() => {
@@ -42,7 +42,7 @@ export default class ModalCoords extends Modal {
   #handleSend() {
     const value = this.#input.value.trim();
     if (!value) {
-      this.#showError("Введите координаты");
+      this.#showError('Введите координаты');
       return;
     }
 
@@ -51,7 +51,7 @@ export default class ModalCoords extends Modal {
       /^[\[\s]*(-?\d{1,2}\.\d{5,})\s*,\s*(-?\d{1,2}\.\d{5,})[\]\s]*$/
     );
     if (!match) {
-      this.#showError("Неверный формат");
+      this.#showError('Неверный формат');
       return;
     }
 
@@ -71,11 +71,11 @@ export default class ModalCoords extends Modal {
 
   #showError(msg) {
     this.#errorMsg.textContent = msg;
-    this.#errorMsg.classList.remove("_hidden");
+    this.#errorMsg.classList.remove('_hidden');
     this.#input.focus();
   }
 
   #hideError() {
-    this.#errorMsg.classList.add("_hidden");
+    this.#errorMsg.classList.add('_hidden');
   }
 }

@@ -1,6 +1,6 @@
-import Post from "../post/Post";
-import ModalCoords from "../modal/coords/ModalCoords";
-import ModalInfo from "../modal/info/ModalInfo";
+import Post from '../post/Post';
+import ModalCoords from '../modal/coords/ModalCoords';
+import ModalInfo from '../modal/info/ModalInfo';
 
 export default class Timeline {
   #els;
@@ -11,7 +11,7 @@ export default class Timeline {
 
   constructor() {
     this.#els = {
-      feed: document.querySelector(".feed"),
+      feed: document.querySelector('.feed'),
       entries: null,
       composerInput: null,
       mediaDuration: null,
@@ -39,47 +39,47 @@ export default class Timeline {
 
   #initDOM() {
     const { feed } = this.#els;
-    if (!feed) throw new Error("Feed container not found");
+    if (!feed) throw new Error('Feed container not found');
 
-    this.#els.entries = feed.querySelector(".feed__entries");
-    this.#els.composerInput = feed.querySelector(".composer__input");
-    this.#els.mediaDuration = feed.querySelector(".media-form__duration");
-    this.#els.videoPreview = feed.querySelector(".composer__video-preview");
-    this.#els.videoElement = feed.querySelector(".composer__video");
-    this.#els.textForm = feed.querySelector(".composer__text-form");
-    this.#els.mediaForm = feed.querySelector(".composer__media-form");
-    this.#els.mediaStart = feed.querySelector(".media-form__start");
-    this.#els.mediaStop = feed.querySelector(".media-form__stop");
-    this.#els.btnAudio = feed.querySelector(".media-form__btn-audio");
-    this.#els.btnVideo = feed.querySelector(".media-form__btn-video");
-    this.#els.btnSend = feed.querySelector(".media-form__btn-send");
-    this.#els.btnCancel = feed.querySelector(".media-form__btn-cancel");
+    this.#els.entries = feed.querySelector('.feed__entries');
+    this.#els.composerInput = feed.querySelector('.composer__input');
+    this.#els.mediaDuration = feed.querySelector('.media-form__duration');
+    this.#els.videoPreview = feed.querySelector('.composer__video-preview');
+    this.#els.videoElement = feed.querySelector('.composer__video');
+    this.#els.textForm = feed.querySelector('.composer__text-form');
+    this.#els.mediaForm = feed.querySelector('.composer__media-form');
+    this.#els.mediaStart = feed.querySelector('.media-form__start');
+    this.#els.mediaStop = feed.querySelector('.media-form__stop');
+    this.#els.btnAudio = feed.querySelector('.media-form__btn-audio');
+    this.#els.btnVideo = feed.querySelector('.media-form__btn-video');
+    this.#els.btnSend = feed.querySelector('.media-form__btn-send');
+    this.#els.btnCancel = feed.querySelector('.media-form__btn-cancel');
   }
 
   #bindEvents() {
-    this.#els.textForm?.addEventListener("submit", (e) => {
+    this.#els.textForm?.addEventListener('submit', (e) => {
       e.preventDefault();
       this.#handleTextSubmit();
     });
 
-    this.#els.composerInput?.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" && !e.shiftKey) {
+    this.#els.composerInput?.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
         this.#handleTextSubmit();
       }
     });
 
-    this.#els.btnAudio?.addEventListener("click", () =>
-      this.#startRecording("audio")
+    this.#els.btnAudio?.addEventListener('click', () =>
+      this.#startRecording('audio')
     );
-    this.#els.btnVideo?.addEventListener("click", () =>
-      this.#startRecording("video")
+    this.#els.btnVideo?.addEventListener('click', () =>
+      this.#startRecording('video')
     );
-    this.#els.btnSend?.addEventListener("click", () =>
-      this.#stopRecording("send")
+    this.#els.btnSend?.addEventListener('click', () =>
+      this.#stopRecording('send')
     );
-    this.#els.btnCancel?.addEventListener("click", () =>
-      this.#stopRecording("cancel")
+    this.#els.btnCancel?.addEventListener('click', () =>
+      this.#stopRecording('cancel')
     );
   }
 
@@ -93,8 +93,8 @@ export default class Timeline {
     const value = this.#els.composerInput?.value.trim();
     if (!value) return;
 
-    await this.#createPost({ type: "text", content: value });
-    if (this.#els.composerInput) this.#els.composerInput.value = "";
+    await this.#createPost({ type: 'text', content: value });
+    if (this.#els.composerInput) this.#els.composerInput.value = '';
   }
 
   async #createPost({ type, content }) {
@@ -117,7 +117,7 @@ export default class Timeline {
   async #requestCoordinates() {
     if (!navigator.geolocation) {
       return this.#modals.coords.showAndAwait(
-        "Ваш браузер не поддерживает геолокацию. Пожалуйста, введите координаты вручную."
+        'Ваш браузер не поддерживает геолокацию. Пожалуйста, введите координаты вручную.'
       );
     }
 
@@ -142,10 +142,10 @@ export default class Timeline {
 
   #getGeolocationErrorMessage(code) {
     const messages = {
-      1: "Доступ к геолокации запрещён. Разрешите его или введите координаты вручную.",
-      2: "Не удалось определить местоположение. Проверьте интернет и повторите.",
+      1: 'Доступ к геолокации запрещён. Разрешите его или введите координаты вручную.',
+      2: 'Не удалось определить местоположение. Проверьте интернет и повторите.',
       default:
-        "Не удалось получить координаты. Пожалуйста, введите их вручную.",
+        'Не удалось получить координаты. Пожалуйста, введите их вручную.',
     };
     return messages[code] || messages.default;
   }
@@ -159,14 +159,14 @@ export default class Timeline {
 
     try {
       const stream = await this.#getUserMedia(type);
-      if (type === "video") {
+      if (type === 'video') {
         this.#els.videoElement.srcObject = stream;
-        this.#els.videoPreview?.classList.remove("_hidden");
+        this.#els.videoPreview?.classList.remove('_hidden');
       }
 
       this.#setupRecorder(stream, type);
       this.#switchMediaControls(true);
-      this.#els.mediaDuration.textContent = "00:00";
+      this.#els.mediaDuration.textContent = '00:00';
     } catch (err) {
       const message = this.#getMediaErrorMessage(type, err);
       await this.#modals.info.showAndAwait(message);
@@ -178,13 +178,13 @@ export default class Timeline {
     if (!navigator.mediaDevices) {
       return {
         success: false,
-        message: "Ваш браузер не поддерживает доступ к медиаустройствам.",
+        message: 'Ваш браузер не поддерживает доступ к медиаустройствам.',
       };
     }
     if (!window.MediaRecorder) {
       return {
         success: false,
-        message: "Ваш браузер не поддерживает запись медиа.",
+        message: 'Ваш браузер не поддерживает запись медиа.',
       };
     }
     return { success: true };
@@ -192,7 +192,7 @@ export default class Timeline {
 
   async #getUserMedia(type) {
     const constraints = { audio: true, video: false };
-    if (type === "video") {
+    if (type === 'video') {
       constraints.video = true;
       // Попытка с аудио, затем без
       try {
@@ -224,9 +224,9 @@ export default class Timeline {
         if (this.#isRecording) {
           duration += 1;
           const date = new Date(1970, 0, 1, 0, 0, duration);
-          this.#els.mediaDuration.textContent = date.toLocaleTimeString("ru", {
-            minute: "2-digit",
-            second: "2-digit",
+          this.#els.mediaDuration.textContent = date.toLocaleTimeString('ru', {
+            minute: '2-digit',
+            second: '2-digit',
           });
         }
       }, 1000);
@@ -236,16 +236,16 @@ export default class Timeline {
       this.#isRecording = false;
       clearInterval(intervalId);
       const blob = new Blob(chunks, {
-        type: type === "audio" ? "audio/webm" : "video/webm",
+        type: type === 'audio' ? 'audio/webm' : 'video/webm',
       });
 
-      if (this.#mediaStopAction === "send") {
+      if (this.#mediaStopAction === 'send') {
         this.#createPost({ type, content: blob });
       }
 
-      if (type === "video") {
+      if (type === 'video') {
         this.#els.videoElement.srcObject = null;
-        this.#els.videoPreview?.classList.add("_hidden");
+        this.#els.videoPreview?.classList.add('_hidden');
       }
 
       this.#cleanupStream(stream);
@@ -263,11 +263,11 @@ export default class Timeline {
 
   #switchMediaControls(isRecording) {
     if (isRecording) {
-      this.#els.mediaStart?.classList.add("_hidden");
-      this.#els.mediaStop?.classList.remove("_hidden");
+      this.#els.mediaStart?.classList.add('_hidden');
+      this.#els.mediaStop?.classList.remove('_hidden');
     } else {
-      this.#els.mediaStart?.classList.remove("_hidden");
-      this.#els.mediaStop?.classList.add("_hidden");
+      this.#els.mediaStart?.classList.remove('_hidden');
+      this.#els.mediaStop?.classList.add('_hidden');
     }
   }
 
@@ -279,13 +279,13 @@ export default class Timeline {
   }
 
   #getMediaErrorMessage(type, error) {
-    const name = type === "audio" ? "микрофон" : "веб-камера";
+    const name = type === 'audio' ? 'микрофон' : 'веб-камера';
     const generic = `Не удалось получить доступ к ${name}. Проверьте подключение и разрешения.`;
 
     // В Chrome/Firefox ошибки permissions дают .name или .message
     if (
-      error.name === "NotAllowedError" ||
-      error.message?.includes("permission")
+      error.name === 'NotAllowedError' ||
+      error.message?.includes('permission')
     ) {
       return `Доступ к ${name} запрещён. Разрешите его в настройках браузера.`;
     }

@@ -1,132 +1,161 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Мой Timeline</title>
-</head>
-<body>
-  <div class="feed _container">
-    <div class="feed__entries">
-
-      <div class="feed__entry entry">
-        <div class="entry__content">
-          <p class="entry__text">«Единственный способ делать великую работу — любить то, что ты делаешь.» — Стив Джобс</p>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Мой Timeline</title>
+  </head>
+  <body>
+    <div class="feed _container">
+      <div class="feed__entries">
+        <div class="feed__entry entry">
+          <div class="entry__content">
+            <p class="entry__text">
+              «Единственный способ делать великую работу — любить то, что ты
+              делаешь.» — Стив Джобс
+            </p>
+          </div>
+          <footer class="entry__meta">
+            <div class="entry__meta-item">
+              <span class="entry__coords">[55.7558, 37.6176]</span>
+            </div>
+            <div class="entry__meta-item">
+              <time class="entry__datetime">15.04.2025 09:23</time>
+            </div>
+          </footer>
         </div>
-        <footer class="entry__meta">
-          <div class="entry__meta-item">
-            <span class="entry__coords">[55.7558, 37.6176]</span>
+
+        <div class="feed__entry entry">
+          <div class="entry__content">
+            <p class="entry__text">Утренняя прогулка по парку</p>
           </div>
-          <div class="entry__meta-item">
-            <time class="entry__datetime">15.04.2025 09:23</time>
+          <footer class="entry__meta">
+            <div class="entry__meta-item">
+              <span class="entry__coords">[48.8566, 2.3522]</span>
+            </div>
+            <div class="entry__meta-item">
+              <time class="entry__datetime">18.04.2025 07:45</time>
+            </div>
+          </footer>
+        </div>
+
+        <div class="feed__entry entry">
+          <div class="entry__content">
+            <audio
+              src="media/voice-note.mp3"
+              preload="metadata"
+              controls
+            ></audio>
           </div>
-        </footer>
+          <footer class="entry__meta">
+            <div class="entry__meta-item">
+              <span class="entry__coords">[40.7128, -74.0060]</span>
+            </div>
+            <div class="entry__meta-item">
+              <time class="entry__datetime">20.04.2025 14:12</time>
+            </div>
+          </footer>
+        </div>
+
+        <div class="feed__entry entry">
+          <div class="entry__content">
+            <div class="entry__media">
+              <video src="media/sunset.mp4" preload="metadata" controls></video>
+            </div>
+          </div>
+          <footer class="entry__meta">
+            <div class="entry__meta-item">
+              <span class="entry__coords">[35.6895, 139.6917]</span>
+            </div>
+            <div class="entry__meta-item">
+              <time class="entry__datetime">22.04.2025 18:55</time>
+            </div>
+          </footer>
+        </div>
+
+        <div class="feed__entry entry">
+          <div class="entry__content">
+            <div class="entry__media">
+              <video
+                src="media/city-walk.mp4"
+                preload="metadata"
+                controls
+              ></video>
+            </div>
+          </div>
+          <footer class="entry__meta">
+            <div class="entry__meta-item">
+              <span class="entry__coords">[59.9343, 30.3351]</span>
+            </div>
+            <div class="entry__meta-item">
+              <time class="entry__datetime">25.04.2025 12:30</time>
+            </div>
+          </footer>
+        </div>
+
+        <div class="feed__entry entry">
+          <div class="entry__content">
+            <div class="entry__media">
+              <video src="media/ocean.mp4" preload="metadata" controls></video>
+            </div>
+          </div>
+          <footer class="entry__meta">
+            <div class="entry__meta-item">
+              <span class="entry__coords">[-33.8688, 151.2093]</span>
+            </div>
+            <div class="entry__meta-item">
+              <time class="entry__datetime">28.04.2025 20:05</time>
+            </div>
+          </footer>
+        </div>
       </div>
 
-      <div class="feed__entry entry">
-        <div class="entry__content">
-          <p class="entry__text">Утренняя прогулка по парку</p>
-        </div>
-        <footer class="entry__meta">
-          <div class="entry__meta-item">
-            <span class="entry__coords">[48.8566, 2.3522]</span>
+      <footer class="feed__composer composer">
+        <div class="_container">
+          <div class="composer__video-preview _hidden">
+            <video class="composer__video" autoplay muted></video>
           </div>
-          <div class="entry__meta-item">
-            <time class="entry__datetime">18.04.2025 07:45</time>
-          </div>
-        </footer>
-      </div>
-
-      <div class="feed__entry entry">
-        <div class="entry__content">
-          <audio src="media/voice-note.mp3" preload="metadata" controls></audio>
-        </div>
-        <footer class="entry__meta">
-          <div class="entry__meta-item">
-            <span class="entry__coords">[40.7128, -74.0060]</span>
-          </div>
-          <div class="entry__meta-item">
-            <time class="entry__datetime">20.04.2025 14:12</time>
-          </div>
-        </footer>
-      </div>
-
-      <div class="feed__entry entry">
-        <div class="entry__content">
-          <div class="entry__media">
-            <video src="media/sunset.mp4" preload="metadata" controls></video>
-          </div>
-        </div>
-        <footer class="entry__meta">
-          <div class="entry__meta-item">
-            <span class="entry__coords">[35.6895, 139.6917]</span>
-          </div>
-          <div class="entry__meta-item">
-            <time class="entry__datetime">22.04.2025 18:55</time>
-          </div>
-        </footer>
-      </div>
-
-      <div class="feed__entry entry">
-        <div class="entry__content">
-          <div class="entry__media">
-            <video src="media/city-walk.mp4" preload="metadata" controls></video>
+          <div class="composer__controls">
+            <form class="composer__text-form">
+              <div class="composer__input-wrap">
+                <textarea
+                  class="composer__input"
+                  rows="3"
+                  name="message"
+                  placeholder="Напишите сообщение"
+                ></textarea>
+              </div>
+            </form>
+            <form class="composer__media-form media-form">
+              <div class="media-form__start">
+                <button
+                  class="media-form__btn-audio btn btn-start"
+                  type="button"
+                ></button>
+                <button
+                  class="media-form__btn-video btn btn-start"
+                  type="button"
+                ></button>
+              </div>
+              <div class="media-form__stop _hidden">
+                <button
+                  class="media-form__btn-send btn btn-stop"
+                  type="button"
+                ></button>
+                <span class="media-form__duration">00:00</span>
+                <button
+                  class="media-form__btn-cancel btn btn-stop"
+                  type="button"
+                ></button>
+              </div>
+            </form>
           </div>
         </div>
-        <footer class="entry__meta">
-          <div class="entry__meta-item">
-            <span class="entry__coords">[59.9343, 30.3351]</span>
-          </div>
-          <div class="entry__meta-item">
-            <time class="entry__datetime">25.04.2025 12:30</time>
-          </div>
-        </footer>
-      </div>
-
-      <div class="feed__entry entry">
-        <div class="entry__content">
-          <div class="entry__media">
-            <video src="media/ocean.mp4" preload="metadata" controls></video>
-          </div>
-        </div>
-        <footer class="entry__meta">
-          <div class="entry__meta-item">
-            <span class="entry__coords">[-33.8688, 151.2093]</span>
-          </div>
-          <div class="entry__meta-item">
-            <time class="entry__datetime">28.04.2025 20:05</time>
-          </div>
-        </footer>
-      </div>
-
+      </footer>
     </div>
-
-    <footer class="feed__composer composer">
-      <div class="_container">
-        <div class="composer__video-preview _hidden">
-          <video class="composer__video" autoplay muted></video>
-        </div>
-        <div class="composer__controls">
-          <form class="composer__text-form">
-            <div class="composer__input-wrap">
-              <textarea class="composer__input" rows="3" name="message" placeholder="Напишите сообщение"></textarea>
-            </div>
-          </form>
-          <form class="composer__media-form media-form">
-            <div class="media-form__start">
-              <button class="media-form__btn-audio btn btn-start" type="button"></button>
-              <button class="media-form__btn-video btn btn-start" type="button"></button>
-            </div>
-            <div class="media-form__stop _hidden">
-              <button class="media-form__btn-send btn btn-stop" type="button"></button>
-              <span class="media-form__duration">00:00</span>
-              <button class="media-form__btn-cancel btn btn-stop" type="button"></button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </footer>
-  </div>
-</body>
+  </body>
 </html>

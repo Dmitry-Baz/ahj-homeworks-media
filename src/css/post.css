@@ -1,0 +1,57 @@
+.feed__entry {
+  margin-bottom: 20px;
+}
+
+.entry {
+  border: 1px solid lightgray;
+  border-radius: 15px;
+  padding: 15px;
+}
+
+.entry__content {
+  margin-bottom: 15px;
+}
+
+.entry__content audio {
+  width: 100%;
+}
+
+.entry__content video {
+  max-width: 100%;
+  vertical-align: bottom;
+}
+
+.entry__media {
+  text-align: center;
+}
+
+.entry__text {
+  font-family: 'Arial Narrow', sans-serif;
+  font-size: 20px;
+  text-align: justify;
+}
+
+/* Entry footer (meta) */
+
+.entry__meta {
+  display: flex;
+  justify-content: space-between;
+}
+
+.entry__coords {
+  position: relative;
+}
+
+.entry__coords:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: -2px;
+  display: block;
+  width: 20px;
+  height: 100%;
+  transform: translateX(100%);
+  background-image: url('../img/geolocation.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+}

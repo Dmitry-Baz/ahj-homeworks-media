@@ -1,23 +1,20 @@
-import html from './modal-info.html';
-import ModalTimeline from '../ModalTimeline';
+import html from "./modal-info.html";
+import Modal from "../Modal";
 
-export default class ModalInfo extends ModalTimeline {
+export default class ModalInfo extends Modal {
+  #textEl;
+  #timelineInput;
+
   constructor({ params } = {}) {
-    super({ html, params });
-    this.els = {
-      ...this.els,
-      text: null,
-    };
-
-    this.init();
+    super({ html });
+    this.#textEl = this.element.querySelector(".modal__text");
+    this.#timelineInput = params?.timelineInputEl;
   }
 
-  init() {
-    this.els.text = this.element.querySelector('.modal__text');
-  }
-
-  show(text = 'Что-то пошло не так.') {
-    this.els.text.textContent = text;
-    super.show();
+  showAndAwait(message = "Произошла ошибка.") {
+    this.#textEl.textContent = message;
+    return super.showAndAwait().finally(() => {
+      this.#timelineInput?.focus();
+    });
   }
 }

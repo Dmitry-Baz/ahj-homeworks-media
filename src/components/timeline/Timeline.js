@@ -1,394 +1,294 @@
-import Post from '../post/Post';
-import ModalCoords from '../modal/coords/ModalCoords';
-import ModalInfo from '../modal/info/ModalInfo';
+import Post from "../post/Post";
+import ModalCoords from "../modal/coords/ModalCoords";
+import ModalInfo from "../modal/info/ModalInfo";
 
 export default class Timeline {
+  #els;
+  #modals;
+  #recorder = null;
+  #isRecording = false;
+  #mediaStopAction = null; // 'send' | 'cancel'
+
   constructor() {
-    this.els = {
-      body: null,
-      input: null,
+    this.#els = {
+      feed: document.querySelector(".feed"),
+      entries: null,
+      composerInput: null,
       mediaDuration: null,
-      userPanelVideoWrap: null,
-      userPanelVideo: null,
-      forms: {
-        text: null,
-        media: null,
-      },
+      videoPreview: null,
+      videoElement: null,
+      textForm: null,
+      mediaForm: null,
       mediaStart: null,
       mediaStop: null,
-      btns: {
-        audio: null,
-        video: null,
-        send: null,
-        cancel: null,
-      },
+      btnAudio: null,
+      btnVideo: null,
+      btnSend: null,
+      btnCancel: null,
     };
 
-    this.modals = {
+    this.#modals = {
       coords: null,
       info: null,
     };
 
-    this.postType = null; // принимает значение 'audio' или 'video'
-    this.recorder = null;
-    this.isRecordStopped = true;
-
-    // Информирует о том какая кнопка была нажата для остановки записи.
-    // Принимает значение 'send' или 'cancel'
-    this.mediaStopBtn = null;
-    this.init();
+    this.#initDOM();
+    this.#bindEvents();
+    this.#initModals();
   }
 
-  init() {
-    this.element = document.querySelector('.timeline');
-    this.els.body = this.element.querySelector('.timeline__body');
+  #initDOM() {
+    const { feed } = this.#els;
+    if (!feed) throw new Error("Feed container not found");
 
-    this.els.forms.text = this.element.querySelector('.user-panel__form-text');
-    this.els.forms.text.addEventListener('submit', this.onFormTextSubmit.bind(this));
-
-    this.els.input = this.element.querySelector('.user-panel__input');
-    this.els.input.addEventListener('keydown', this.onInputKeypress.bind(this));
-    this.els.input.focus();
-
-    this.els.forms.media = this.element.querySelector('.form-media');
-    this.els.forms.media.addEventListener('submit', this.onFormMediaSubmit.bind(this));
-
-    this.els.mediaDuration = this.element.querySelector('.form-media__duration');
-
-    this.els.mediaStart = this.element.querySelector('.form-media__start');
-    this.els.mediaStop = this.element.querySelector('.form-media__stop');
-
-    this.els.btns.audio = this.element.querySelector('.form-media__btn-audio');
-    this.els.btns.audio.addEventListener('click', this.onBtnAudioClick.bind(this));
-
-    this.els.btns.video = this.element.querySelector('.form-media__btn-video');
-    this.els.btns.video.addEventListener('click', this.onBtnVideoClick.bind(this));
-
-    this.els.btns.send = this.element.querySelector('.form-media__btn-send');
-    this.els.btns.send.addEventListener('click', this.onBtnSendClick.bind(this));
-
-    this.els.btns.cancel = this.element.querySelector('.form-media__btn-cancel');
-    this.els.btns.cancel.addEventListener('click', this.onBtnCancelClick.bind(this));
-
-    this.els.userPanelVideoWrap = this.element.querySelector('.user-panel__video-wrap');
-    this.els.userPanelVideo = this.element.querySelector('.user-panel__video');
-
-    // Передаем дополнительный параметр для модального окна - элемент input Timeline'a,
-    // что бы при любом закрытии окна, оно само устанавливало в этот input фокус.
-    this.modals.coords = new ModalCoords({ params: { timelineInputEl: this.els.input } });
-    this.modals.info = new ModalInfo({ params: { timelineInputEl: this.els.input } });
+    this.#els.entries = feed.querySelector(".feed__entries");
+    this.#els.composerInput = feed.querySelector(".composer__input");
+    this.#els.mediaDuration = feed.querySelector(".media-form__duration");
+    this.#els.videoPreview = feed.querySelector(".composer__video-preview");
+    this.#els.videoElement = feed.querySelector(".composer__video");
+    this.#els.textForm = feed.querySelector(".composer__text-form");
+    this.#els.mediaForm = feed.querySelector(".composer__media-form");
+    this.#els.mediaStart = feed.querySelector(".media-form__start");
+    this.#els.mediaStop = feed.querySelector(".media-form__stop");
+    this.#els.btnAudio = feed.querySelector(".media-form__btn-audio");
+    this.#els.btnVideo = feed.querySelector(".media-form__btn-video");
+    this.#els.btnSend = feed.querySelector(".media-form__btn-send");
+    this.#els.btnCancel = feed.querySelector(".media-form__btn-cancel");
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  async getCoordsAuto() {
-    return new Promise((resolve) => {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          resolve({
-            success: true,
-            coords: position.coords,
-          });
-        },
-        (error) => {
-          resolve({
-            success: false,
-            errCode: error,
-          });
-        },
-      );
+  #bindEvents() {
+    this.#els.textForm?.addEventListener("submit", (e) => {
+      e.preventDefault();
+      this.#handleTextSubmit();
     });
+
+    this.#els.composerInput?.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        this.#handleTextSubmit();
+      }
+    });
+
+    this.#els.btnAudio?.addEventListener("click", () =>
+      this.#startRecording("audio")
+    );
+    this.#els.btnVideo?.addEventListener("click", () =>
+      this.#startRecording("video")
+    );
+    this.#els.btnSend?.addEventListener("click", () =>
+      this.#stopRecording("send")
+    );
+    this.#els.btnCancel?.addEventListener("click", () =>
+      this.#stopRecording("cancel")
+    );
   }
 
-  async getCoordsManual(errCode) {
-    const modalTexts = {
-      0: 'К сожалению, ваш браузер не поддерживает определение место положения, пожалуйста, воспользуйтесь другим браузером, либо введите координаты вручную.',
-      1: 'К сожалению, нам не удалось определить ваше место положение, пожалуйста, дайте разрешение на использование геолокации, либо введите координаты вручную.',
-      2: 'К сожалению, нам не удалось определить ваше место положение, пожалуйста, проверьте ваше интернет соединение, либо введите координаты вручную.',
-      3: null,
-    };
-
-    modalTexts['3'] = modalTexts['2'];
-
-    let modalText = 'К сожалению, нам не удалось определить ваше место положение, пожалуйста, введите координаты вручную.';
-
-    if (errCode in modalTexts) modalText = modalTexts[errCode];
-
-    this.modals.coords.show(modalText);
-    const result = await this.modals.coords.getData();
-    this.modals.coords.hide();
-    return result;
+  #initModals() {
+    const params = { timelineInputEl: this.#els.composerInput };
+    this.#modals.coords = new ModalCoords({ params });
+    this.#modals.info = new ModalInfo({ params });
   }
 
-  async getCoords() {
-    let result = {
-      errCode: {
-        code: 0, // Код ошибки на случай, если браузер не поддерживает geolocation.
-      },
-    };
+  async #handleTextSubmit() {
+    const value = this.#els.composerInput?.value.trim();
+    if (!value) return;
 
-    if (navigator.geolocation) {
-      // Геолокация поддерживается браузером. Запрашиваем координиаты
-      result = await this.getCoordsAuto();
-      if (result.success) return result;
+    await this.#createPost({ type: "text", content: value });
+    if (this.#els.composerInput) this.#els.composerInput.value = "";
+  }
+
+  async #createPost({ type, content }) {
+    const coordsResult = await this.#requestCoordinates();
+
+    if (!coordsResult.success && !coordsResult.publishWithoutCoords) {
+      return;
     }
-
-    // Предлагаем пользователю ввести координаты вручную.
-    result = await this.getCoordsManual(result.errCode.code);
-    return result;
-  }
-
-  async createPost({ type, content }) {
-    const result = await this.getCoords();
-
-    if (!result.success && !result.publishWithoutCoords) return;
 
     const postData = {
       type,
       content,
-      coords: null,
+      coords: coordsResult.success ? coordsResult.coords : null,
     };
-
-    if (result.success) postData.coords = result.coords;
 
     const post = new Post(postData);
-    this.els.body.prepend(post.element);
-
-    if (type === 'text') this.els.input.value = '';
+    this.#els.entries?.prepend(post.element);
   }
 
-  // Не удается использовать, так как попытка прокинуть событие с помощью dispatchEvent из
-  // onInputKeypress блокируется в браузере firefox и считается устаревшим подходом.
-  // eslint-disable-next-line class-methods-use-this
-  async onFormTextSubmit(event) {
-    event.preventDefault();
-    // onFormTextSubmit не будет вызван.
-    // Запускаем this.createPost() сразу в onInputKeypress.
-    // this.createPost({ type: 'text', content: this.els.input.value });
-  }
-
-  async onInputKeypress(event) {
-    if (event.key !== 'Enter') return;
-    event.preventDefault();
-    if (this.els.input.value === '') return;
-
-    // submit формы через this.els.forms.text.submit() не отлавливается в addEventListener.
-    // Однако попытка с использованием dispatchEvent блокируется в firefox.
-    // Поэтому вызываем this.createPost() прямо здесь.
-    // this.els.forms.text.dispatchEvent(new Event('submit'));
-    this.createPost({ type: 'text', content: this.els.input.value });
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  onFormMediaSubmit(event) {
-    event.preventDefault();
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  checkMediaSupport() {
-    const result = {
-      success: true,
-      errCode: null,
-    };
-
-    if (!navigator.mediaDevices) {
-      result.success = false;
-      result.errCode = 'noMediaDevices';
-      return result;
+  async #requestCoordinates() {
+    if (!navigator.geolocation) {
+      return this.#modals.coords.showAndAwait(
+        "Ваш браузер не поддерживает геолокацию. Пожалуйста, введите координаты вручную."
+      );
     }
-
-    if (!window.MediaRecorder) {
-      result.success = false;
-      result.errCode = 'noMediaRecorder';
-      return result;
-    }
-
-    return result;
-  }
-
-  async showModalInfo(errCode) {
-    const messages = {
-      noMediaDevices: 'К сожалению, Ваш браузер не поддерживает функцию доступа Timeline мессенджера к аудио/видео устройствам. Пожалуйста, воспользуйтесь другим браузером.',
-      noMediaRecorder: 'К сожалению, Ваш браузер не поддерживает функцию записи аудио/видео Timeline мессенджера. Пожалуйста, воспользуйтесь другим браузером.',
-      noMicPermission: 'В Вашем браузере запрещен доступ к микрофону. Если Вы хотите сделать аудио запись, разрешите доступ к микрофону.',
-      noCameraPermission: 'В Вашем браузере запрещен доступ к веб-камере. Если Вы хотите сделать видео запись, разрешите доступ к веб-камере.',
-      audioRecordTrouble: 'Ошибка аудио записи. Проверьте, подключен ли микрофон.',
-      videoRecordTrouble: 'Ошибка видео записи. Проверьте, подключена ли веб-камера.',
-      noPermissionSupportMic: 'Ошибка аудио записи. Проверьте, подключен ли микрофон и разрешен ли к нему доступ в Вашем браузере.',
-      noPermissionSupportCamera: 'Ошибка видео записи. Проверьте, подключена ли веб-камера и разрешен ли к ней доступ в Вашем браузере.',
-    };
-
-    this.modals.info.show(messages[errCode]);
-    await this.modals.info.getData();
-  }
-
-  async createStreamBlob(type) {
-    const constraints = {
-      audio: true,
-      video: false,
-    };
-
-    if (type === 'video') constraints.video = true;
 
     try {
-      let stream = null;
-
-      if (type === 'audio') {
-        stream = await navigator.mediaDevices.getUserMedia(constraints);
-      } else if (type === 'video') {
-        const result = await this.getVideoStream();
-
-        if (!result.success) throw result.err;
-
-        stream = result.stream;
-
-        this.els.userPanelVideo.srcObject = stream;
-        this.els.userPanelVideo.play();
-        this.els.userPanelVideoWrap.classList.remove('_hidden');
-      }
-
-      this.recorder = new MediaRecorder(stream);
-      const chunk = [];
-
-      this.recorder.addEventListener('start', () => {
-        this.isRecordStopped = false;
-        let duration = 0; // Длительность записи в секундах.
-
-        const interval = setInterval(() => {
-          if (this.isRecordStopped) {
-            clearInterval(interval);
-          } else {
-            duration += 1;
-            // Получение длительности записи в формате 00:00
-            const date = new Date(1970, 1, 1, 0, 0, duration);
-            this.els.mediaDuration.textContent = date.toLocaleTimeString('ru', { minute: '2-digit', second: '2-digit' });
-          }
-        }, 1000);
-      });
-
-      this.recorder.addEventListener('dataavailable', (event) => {
-        chunk.push(event.data);
-      });
-
-      this.recorder.addEventListener('stop', () => {
-        this.isRecordStopped = true;
-        const content = new Blob(chunk);
-        if (this.mediaStopBtn === 'send') this.createPost({ type, content });
-
-        if (type === 'video') {
-          this.els.userPanelVideo.src = null;
-          this.els.userPanelVideoWrap.classList.add('_hidden');
-        }
-
-        this.els.mediaStop.classList.add('_hidden');
-        this.els.mediaStart.classList.remove('_hidden');
-        stream.getTracks().forEach((track) => track.stop());
-      });
-
-      this.els.mediaDuration.textContent = '00:00';
-      this.els.mediaStart.classList.add('_hidden');
-      this.els.mediaStop.classList.remove('_hidden');
-      this.recorder.start();
-    } catch (e) {
-      const err = {
-        audio: {
-          name: 'microphone',
-          textPermission: 'noMicPermission',
-          textRecordTrouble: 'audioRecordTrouble',
-          noPermissionSupport: 'noPermissionSupportMic',
-        },
-        video: {
-          name: 'camera',
-          textPermission: 'noCameraPermission',
-          textRecordTrouble: 'videoRecordTrouble',
-          noPermissionSupport: 'noPermissionSupportCamera',
-        },
-      };
-
-      // Дополнительное оборачивание в try для firefox, так как он на данный момент не поддерживает
-      // name: 'microphone' и name: 'camera'.
-      try {
-        // Проверка разрешен ли доступ к микрофону/веб-камере. Работает в Chrome.
-        const micStatusPermission = await navigator.permissions.query({ name: err[type].name });
-
-        if (micStatusPermission.state === 'denied') {
-          await this.showModalInfo(err[type].textPermission);
-          return;
-        }
-
-        // Так как доступ разрешен, то возможно микрофон/веб-камера не подключены.
-        await this.showModalInfo(err[type].textRecordTrouble);
-      } catch (e2) {
-        await this.showModalInfo(err[type].noPermissionSupport);
-      }
+      const position = await this.#getCurrentPosition();
+      return { success: true, coords: position.coords };
+    } catch (error) {
+      const message = this.#getGeolocationErrorMessage(error.code);
+      return this.#modals.coords.showAndAwait(message);
     }
   }
 
-  async onBtnAudioClick() {
-    const result = this.checkMediaSupport();
+  #getCurrentPosition() {
+    return new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(resolve, reject, {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 60000,
+      });
+    });
+  }
 
-    if (!result.success) {
-      await this.showModalInfo(result.errCode);
+  #getGeolocationErrorMessage(code) {
+    const messages = {
+      1: "Доступ к геолокации запрещён. Разрешите его или введите координаты вручную.",
+      2: "Не удалось определить местоположение. Проверьте интернет и повторите.",
+      default:
+        "Не удалось получить координаты. Пожалуйста, введите их вручную.",
+    };
+    return messages[code] || messages.default;
+  }
+
+  async #startRecording(type) {
+    const support = this.#checkMediaSupport();
+    if (!support.success) {
+      await this.#modals.info.showAndAwait(support.message);
       return;
     }
 
-    this.postType = 'audio';
-    this.createStreamBlob(this.postType);
-  }
-
-  onBtnSendClick() {
-    this.mediaStopBtn = 'send';
-    this.recorder.stop();
-  }
-
-  onBtnCancelClick() {
-    this.mediaStopBtn = 'cancel';
-    this.recorder.stop();
-  }
-
-  /*
-    Отдельная функция для получения видео потока.
-    Сначала пытаемся захватить аудио и видео потоки. Если у пользователя нет микрофона
-    и в вебкамере тоже нет микрофона, то будет ошибка. Поэтому пытаемся получить видео поток
-    без аудио, если в этом случае тоже получаем ошибку, только тогда сообщаем об этом пользователю.
-   */
-  // eslint-disable-next-line class-methods-use-this
-  async getVideoStream() {
-    const result = {
-      success: true,
-      stream: null,
-      err: null,
-    };
-
     try {
-      result.stream = await navigator.mediaDevices.getUserMedia({
-        audio: true,
-        video: true,
-      });
-      return result;
-    } catch (e1) {
+      const stream = await this.#getUserMedia(type);
+      if (type === "video") {
+        this.#els.videoElement.srcObject = stream;
+        this.#els.videoPreview?.classList.remove("_hidden");
+      }
+
+      this.#setupRecorder(stream, type);
+      this.#switchMediaControls(true);
+      this.#els.mediaDuration.textContent = "00:00";
+    } catch (err) {
+      const message = this.#getMediaErrorMessage(type, err);
+      await this.#modals.info.showAndAwait(message);
+      this.#cleanupStream(err.stream);
+    }
+  }
+
+  #checkMediaSupport() {
+    if (!navigator.mediaDevices) {
+      return {
+        success: false,
+        message: "Ваш браузер не поддерживает доступ к медиаустройствам.",
+      };
+    }
+    if (!window.MediaRecorder) {
+      return {
+        success: false,
+        message: "Ваш браузер не поддерживает запись медиа.",
+      };
+    }
+    return { success: true };
+  }
+
+  async #getUserMedia(type) {
+    const constraints = { audio: true, video: false };
+    if (type === "video") {
+      constraints.video = true;
+      // Попытка с аудио, затем без
       try {
-        result.stream = await navigator.mediaDevices.getUserMedia({
+        return await navigator.mediaDevices.getUserMedia({
+          audio: true,
+          video: true,
+        });
+      } catch {
+        return await navigator.mediaDevices.getUserMedia({
           audio: false,
           video: true,
         });
-        return result;
-      } catch (e2) {
-        result.success = false;
-        result.err = e2;
-        return result;
       }
+    }
+    return await navigator.mediaDevices.getUserMedia(constraints);
+  }
+
+  #setupRecorder(stream, type) {
+    this.#recorder = new MediaRecorder(stream);
+    const chunks = [];
+    let duration = 0;
+    let intervalId = null;
+
+    this.#recorder.ondataavailable = (e) => chunks.push(e.data);
+    this.#recorder.onstart = () => {
+      this.#isRecording = true;
+      duration = 0;
+      intervalId = setInterval(() => {
+        if (this.#isRecording) {
+          duration += 1;
+          const date = new Date(1970, 0, 1, 0, 0, duration);
+          this.#els.mediaDuration.textContent = date.toLocaleTimeString("ru", {
+            minute: "2-digit",
+            second: "2-digit",
+          });
+        }
+      }, 1000);
+    };
+
+    this.#recorder.onstop = () => {
+      this.#isRecording = false;
+      clearInterval(intervalId);
+      const blob = new Blob(chunks, {
+        type: type === "audio" ? "audio/webm" : "video/webm",
+      });
+
+      if (this.#mediaStopAction === "send") {
+        this.#createPost({ type, content: blob });
+      }
+
+      if (type === "video") {
+        this.#els.videoElement.srcObject = null;
+        this.#els.videoPreview?.classList.add("_hidden");
+      }
+
+      this.#cleanupStream(stream);
+      this.#switchMediaControls(false);
+    };
+
+    this.#recorder.start();
+  }
+
+  #cleanupStream(stream) {
+    if (stream) {
+      stream.getTracks().forEach((track) => track.stop());
     }
   }
 
-  async onBtnVideoClick() {
-    const result = this.checkMediaSupport();
-
-    if (!result.success) {
-      await this.showModalInfo(result.errCode);
-      return;
+  #switchMediaControls(isRecording) {
+    if (isRecording) {
+      this.#els.mediaStart?.classList.add("_hidden");
+      this.#els.mediaStop?.classList.remove("_hidden");
+    } else {
+      this.#els.mediaStart?.classList.remove("_hidden");
+      this.#els.mediaStop?.classList.add("_hidden");
     }
+  }
 
-    this.postType = 'video';
-    this.createStreamBlob(this.postType);
+  #stopRecording(action) {
+    this.#mediaStopAction = action;
+    if (this.#recorder && this.#isRecording) {
+      this.#recorder.stop();
+    }
+  }
+
+  #getMediaErrorMessage(type, error) {
+    const name = type === "audio" ? "микрофон" : "веб-камера";
+    const generic = `Не удалось получить доступ к ${name}. Проверьте подключение и разрешения.`;
+
+    // В Chrome/Firefox ошибки permissions дают .name или .message
+    if (
+      error.name === "NotAllowedError" ||
+      error.message?.includes("permission")
+    ) {
+      return `Доступ к ${name} запрещён. Разрешите его в настройках браузера.`;
+    }
+    return generic;
   }
 }

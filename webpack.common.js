@@ -1,58 +1,56 @@
-const path = require('path');
-const HtmlWebPackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const path = require("path");
+const HtmlWebPackPlugin = require("html-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
-// Хеширование файлов только в production mode
-function addHash(fileName, buildMode, hash = 'contenthash') {
-  return buildMode === 'production' ? fileName.replace(/\.[^.]+$/, `.[${hash}]$&`) : fileName;
-}
-
-module.exports = (buildMode) => ({
-  entry: './src/index.js',
+module.exports = {
+  target: "web",
   output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: addHash('[name].js', buildMode),
+    path: path.resolve(__dirname, "dist"),
+    publicPath: "",
   },
   module: {
     rules: [
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: ['babel-loader'],
+        use: {
+          loader: "babel-loader",
+        },
       },
       {
         test: /\.html$/,
-        use: ['html-loader'],
-      },
-      {
-        test: /\.css$/,
         use: [
-          MiniCssExtractPlugin.loader, 'css-loader',
+          {
+            loader: "html-loader",
+          },
         ],
       },
       {
-        test: /\.(svg|mp3|mp4)$/,
+        test: /\.(png|jpg|gif)$/i,
         use: [
           {
-            loader: 'url-loader',
+            loader: "url-loader",
             options: {
-              limit: 3072,
+              limit: 8192,
+              name: "assets/[hash].[ext]",
             },
           },
         ],
       },
+      {
+        test: /\.css$/,
+        use: [MiniCssExtractPlugin.loader, "css-loader"],
+      },
     ],
   },
   plugins: [
-    new CleanWebpackPlugin(),
     new HtmlWebPackPlugin({
-      template: './src/index.html',
-      filename: './index.html',
+      template: "./src/index.html",
+      filename: "./index.html",
     }),
     new MiniCssExtractPlugin({
-      filename: addHash('[name].css', buildMode),
-      chunkFilename: addHash('[id].css', buildMode),
+      filename: "[name].css",
+      chunkFilename: "[id].css",
     }),
   ],
-});
+};

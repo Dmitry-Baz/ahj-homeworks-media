@@ -1,76 +1,85 @@
-import postHTML from './post.html';
+import postHTML from "./post.html";
 
 export default class Post {
+  #element;
+  #els;
+
   constructor({ type, content, coords } = {}) {
-    this.element = null;
-    this.els = {
-      body: null,
-      coords: null,
-      date: null,
+    const temp = document.createElement("div");
+    temp.innerHTML = postHTML.trim();
+
+    this.#element = temp.firstElementChild;
+    this.#els = {
+      content: this.#element.querySelector(".entry__content"),
+      coords: this.#element.querySelector(".entry__coords"),
+      datetime: this.#element.querySelector(".entry__datetime"),
     };
 
-    this.init(type, content, coords);
-  }
+    this.#setDateTime();
+    this.#setCoords(coords);
 
-  init(type, content, coords) {
-    let tempWrapEl = document.createElement('div');
-    tempWrapEl.insertAdjacentHTML('afterbegin', postHTML);
+    const creator = {
+      text: this.#createText,
+      audio: this.#createAudio,
+      video: this.#createVideo,
+    }[type];
 
-    this.element = tempWrapEl.querySelector('.post');
-    tempWrapEl = null;
-
-    this.els.body = this.element.querySelector('.post__body');
-    this.els.coords = this.element.querySelector('.post__coords');
-    this.els.date = this.element.querySelector('.post__date');
-    this.setCoords(coords);
-    this.setDate();
-
-    const create = {
-      text: Post.createTextPost,
-      audio: Post.createAudioPost,
-      video: Post.createVideoPost,
-    };
-
-    const postEl = create[type](content);
-    this.els.body.append(postEl);
-  }
-
-  setCoords(coords) {
-    if (coords && 'latitude' in coords) {
-      this.els.coords.textContent = `[${coords.latitude}, ${coords.longitude}]`;
-      return;
+    if (creator) {
+      this.#els.content.appendChild(creator(content));
     }
-
-    this.els.coords.classList.add('_hidden');
   }
 
-  setDate() {
-    const created = new Date();
-    const date = created.toLocaleDateString('ru');
-    const time = created.toLocaleTimeString('ru', { hour: 'numeric', minute: 'numeric' });
-    this.els.date.textContent = `${date} ${time}`;
+  get element() {
+    return this.#element;
   }
 
-  static createTextPost(content) {
-    const postTextEl = document.createElement('p');
-    postTextEl.classList.add('post__text');
-    postTextEl.textContent = content;
-    return postTextEl;
+  #setCoords(coords) {
+    if (
+      coords &&
+      typeof coords.latitude === "number" &&
+      typeof coords.longitude === "number"
+    ) {
+      this.#els.coords.textContent = `[${coords.latitude.toFixed(
+        5
+      )}, ${coords.longitude.toFixed(5)}]`;
+    } else {
+      this.#els.coords.classList.add("_hidden");
+    }
   }
 
-  static createAudioPost(content) {
-    const postAudioEl = document.createElement('audio');
-    postAudioEl.preload = 'metadata';
-    postAudioEl.controls = true;
-    postAudioEl.src = URL.createObjectURL(content);
-    return postAudioEl;
+  #setDateTime() {
+    const now = new Date();
+    const date = now.toLocaleDateString("ru");
+    const time = now.toLocaleTimeString("ru", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+    this.#els.datetime.textContent = `${date} ${time}`;
   }
 
-  static createVideoPost(content) {
-    const postVideoEl = document.createElement('video');
-    postVideoEl.preload = 'metadata';
-    postVideoEl.controls = true;
-    postVideoEl.src = URL.createObjectURL(content);
-    return postVideoEl;
+  #createText(content) {
+    const el = document.createElement("p");
+    el.className = "entry__text";
+    el.textContent = content;
+    return el;
+  }
+
+  #createAudio(blob) {
+    const el = document.createElement("audio");
+    el.controls = true;
+    el.preload = "metadata";
+    el.src = URL.createObjectURL(blob);
+    return el;
+  }
+
+  #createVideo(blob) {
+    const el = document.createElement("div");
+    el.className = "entry__media";
+    const video = document.createElement("video");
+    video.controls = true;
+    video.preload = "metadata";
+    video.src = URL.createObjectURL(blob);
+    el.appendChild(video);
+    return el;
   }
 }

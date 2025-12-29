@@ -2,4 +2,4 @@
 @import "timeline.css";
 @import "../components/post/post.css";
 @import "btn.css";
-@import "utility.css"; /* Подключать всегда в конце */
+@import "utility.css";

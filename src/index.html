@@ -1,141 +1,132 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-   <!-- web-браузер Internet Explorer будет более точно следовать спецификации документа -->
-   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
-   <!-- Кодировка страницы -->
-   <meta charset="UTF-8">
-
-   <!-- Для поддержки адаптивности -->
-   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-
-   <title>ahj-hw.-10-media.-1-2-3-timeline</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Мой Timeline</title>
 </head>
 <body>
-   <h1>10. Домашнее задание к лекции «Geolocation, Notification, Media»</h1>
-   <h2>10.1, 10.2*, 10.3* - Timeline</span></h2>
-   <div class="timeline _container">
-      <div class="timeline__body">
+  <div class="feed _container">
+    <div class="feed__entries">
 
-         <div class="timeline__post post">
-            <div class="post__body">
-               <p class="post__text">Все пути одинаковы: они ведут в никуда. Есть ли у этого пути сердце? Если есть, то это хороший путь; если нет, то от него никакого толку. Один путь делает путешествие по нему радостным: сколько ни странствуешь — ты и твой путь нераздельны. Другой путь заставит тебя проклинать свою жизнь. Один путь дает тебе силы, другой — уничтожает тебя. (Дон Хуан Матус)</p>
-            </div>
-            <footer class="post__footer">
-               <div class="footer-post__column">
-                  <div class="post__coords">[51.50851, -0.12572]</div>
-               </div>
-               <div class="footer-post__column">
-                  <div class="post__date">02.08.2021 15:38</div>
-               </div>
-            </footer>
-         </div>
-
-         <div class="timeline__post post">
-            <div class="post__body">
-               <div class="post__text">Максим Чигинцев. Вариация на тему "Besame mucho".</div>
-            </div>
-            <footer class="post__footer">
-               <div class="footer-post__column">
-                  <div class="post__coords">[51.50851, -0.12572]</div>
-               </div>
-               <div class="footer-post__column">
-                  <div class="post__date">02.08.2021 15:38</div>
-               </div>
-            </footer>
-         </div>
-
-         <div class="timeline__post post">
-            <div class="post__body">
-               <audio src="media/Besame mucho (variaciya na temu).mp3" preload="metadata" controls></audio>
-            </div>
-            <footer class="post__footer">
-               <div class="footer-post__column">
-                  <div class="post__coords">[51.50851, -0.12572]</div>
-               </div>
-               <div class="footer-post__column">
-                  <div class="post__date">02.08.2021 15:38</div>
-               </div>
-            </footer>
-         </div>
-
-         <div class="timeline__post post">
-            <div class="post__body">
-               <div class="post__video">
-                  <video src="media/Beach - 3998_960x540.mp4" controls></video>
-               </div>
-            </div>
-            <footer class="post__footer">
-               <div class="footer-post__column">
-                  <div class="post__coords">[51.50851, -0.12572]</div>
-               </div>
-               <div class="footer-post__column">
-                  <div class="post__date">02.08.2021 15:38</div>
-               </div>
-            </footer>
-         </div>
-
-         <div class="timeline__post post">
-            <div class="post__body">
-               <div class="post__video">
-                  <video src="media/pexels-nataliya-vaitkevich-5292675_360x640.mp4" preload="metadata" controls></video>
-               </div>
-            </div>
-            <footer class="post__footer">
-               <div class="footer-post__column">
-                  <div class="post__coords">[51.50851, -0.12572]</div>
-               </div>
-               <div class="footer-post__column">
-                  <div class="post__date">02.08.2021 15:38</div>
-               </div>
-            </footer>
-         </div>
-
-         <div class="timeline__post post">
-            <div class="post__body">
-               <div class="post__video">
-                  <video preload="metadata" controls src="media/Barcelona - 48688_1920x1080.mp4"></video>
-               </div>
-            </div>
-            <footer class="post__footer">
-               <div class="footer-post__column">
-                  <div class="post__coords">[51.50851, -0.12572]</div>
-               </div>
-               <div class="footer-post__column">
-                  <div class="post__date">02.08.2021 15:38</div>
-               </div>
-            </footer>
-         </div>
+      <div class="feed__entry entry">
+        <div class="entry__content">
+          <p class="entry__text">«Единственный способ делать великую работу — любить то, что ты делаешь.» — Стив Джобс</p>
+        </div>
+        <footer class="entry__meta">
+          <div class="entry__meta-item">
+            <span class="entry__coords">[55.7558, 37.6176]</span>
+          </div>
+          <div class="entry__meta-item">
+            <time class="entry__datetime">15.04.2025 09:23</time>
+          </div>
+        </footer>
       </div>
 
-      <footer class="timeline__footer">
-         <div class="_container">
-            <div class="user-panel">
-               <div class="user-panel__video-wrap _hidden">
-                  <video class="user-panel__video" autoplay muted></video>
-               </div>
-               <div class="user-panel__control">
-                  <form class="user-panel__form-text">
-                     <div class="user-panel__input-wrap">
-                        <textarea class="user-panel__input" rows="3" name="message" placeholder="Enter a message"></textarea>
-                     </div>
-                  </form>
-                  <form class="user-panel__form-media form-media">
-                     <div class="form-media__start">
-                        <button class="form-media__btn-audio btn btn-start"></button>
-                        <button class="form-media__btn-video btn btn-start"></button>
-                     </div>
-                     <div class="form-media__stop _hidden">
-                        <button class="form-media__btn-send btn btn-stop"></button>
-                        <span class="form-media__duration"></span>
-                        <button class="form-media__btn-cancel btn btn-stop"></button>
-                     </div>
-                  </form>
-               </div>
+      <div class="feed__entry entry">
+        <div class="entry__content">
+          <p class="entry__text">Утренняя прогулка по парку</p>
+        </div>
+        <footer class="entry__meta">
+          <div class="entry__meta-item">
+            <span class="entry__coords">[48.8566, 2.3522]</span>
+          </div>
+          <div class="entry__meta-item">
+            <time class="entry__datetime">18.04.2025 07:45</time>
+          </div>
+        </footer>
+      </div>
+
+      <div class="feed__entry entry">
+        <div class="entry__content">
+          <audio src="media/voice-note.mp3" preload="metadata" controls></audio>
+        </div>
+        <footer class="entry__meta">
+          <div class="entry__meta-item">
+            <span class="entry__coords">[40.7128, -74.0060]</span>
+          </div>
+          <div class="entry__meta-item">
+            <time class="entry__datetime">20.04.2025 14:12</time>
+          </div>
+        </footer>
+      </div>
+
+      <div class="feed__entry entry">
+        <div class="entry__content">
+          <div class="entry__media">
+            <video src="media/sunset.mp4" preload="metadata" controls></video>
+          </div>
+        </div>
+        <footer class="entry__meta">
+          <div class="entry__meta-item">
+            <span class="entry__coords">[35.6895, 139.6917]</span>
+          </div>
+          <div class="entry__meta-item">
+            <time class="entry__datetime">22.04.2025 18:55</time>
+          </div>
+        </footer>
+      </div>
+
+      <div class="feed__entry entry">
+        <div class="entry__content">
+          <div class="entry__media">
+            <video src="media/city-walk.mp4" preload="metadata" controls></video>
+          </div>
+        </div>
+        <footer class="entry__meta">
+          <div class="entry__meta-item">
+            <span class="entry__coords">[59.9343, 30.3351]</span>
+          </div>
+          <div class="entry__meta-item">
+            <time class="entry__datetime">25.04.2025 12:30</time>
+          </div>
+        </footer>
+      </div>
+
+      <div class="feed__entry entry">
+        <div class="entry__content">
+          <div class="entry__media">
+            <video src="media/ocean.mp4" preload="metadata" controls></video>
+          </div>
+        </div>
+        <footer class="entry__meta">
+          <div class="entry__meta-item">
+            <span class="entry__coords">[-33.8688, 151.2093]</span>
+          </div>
+          <div class="entry__meta-item">
+            <time class="entry__datetime">28.04.2025 20:05</time>
+          </div>
+        </footer>
+      </div>
+
+    </div>
+
+    <footer class="feed__composer composer">
+      <div class="_container">
+        <div class="composer__video-preview _hidden">
+          <video class="composer__video" autoplay muted></video>
+        </div>
+        <div class="composer__controls">
+          <form class="composer__text-form">
+            <div class="composer__input-wrap">
+              <textarea class="composer__input" rows="3" name="message" placeholder="Напишите сообщение"></textarea>
             </div>
-         </div>
-      </footer>
-   </div>
+          </form>
+          <form class="composer__media-form media-form">
+            <div class="media-form__start">
+              <button class="media-form__btn-audio btn btn-start" type="button"></button>
+              <button class="media-form__btn-video btn btn-start" type="button"></button>
+            </div>
+            <div class="media-form__stop _hidden">
+              <button class="media-form__btn-send btn btn-stop" type="button"></button>
+              <span class="media-form__duration">00:00</span>
+              <button class="media-form__btn-cancel btn btn-stop" type="button"></button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </footer>
+  </div>
 </body>
 </html>

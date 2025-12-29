@@ -15,7 +15,6 @@
   height: 70%;
   left: 50%;
   transform: translateX(-50%);
-
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -25,11 +24,11 @@
   cursor: pointer;
 }
 
-.form-media__btn-audio::after {
+.media-form__btn-audio::after {
   background-image: url('../img/mic.svg');
 }
 
-.form-media__btn-video::after {
+.media-form__btn-video::after {
   background-image: url('../img/video.svg');
 }
 
@@ -42,34 +41,33 @@
   box-shadow: 0 0 5px 0 var(--color-blue-48);
 }
 
-.form-media__btn-send {
+.media-form__btn-send {
   border-color: var(--color-green);
 }
 
-.form-media__btn-send::after {
+.media-form__btn-send::after {
   width: 60%;
   height: 60%;
   background-image: url('../img/ok.svg');
-
   transform: translateX(-45%);
 }
 
-.form-media__btn-send:focus,
-.form-media__btn-send:hover {
+.media-form__btn-send:focus,
+.media-form__btn-send:hover {
   box-shadow: 0 0 5px 0 var(--color-green);
 }
 
-.form-media__btn-cancel {
+.media-form__btn-cancel {
   border-color: var(--color-gray);
 }
 
-.form-media__btn-cancel::after {
+.media-form__btn-cancel::after {
   width: 50%;
   height: 50%;
   background-image: url('../img/cancel.svg');
 }
 
-.form-media__btn-cancel:focus,
-.form-media__btn-cancel:hover {
+.media-form__btn-cancel:focus,
+.media-form__btn-cancel:hover {
   box-shadow: 0 0 5px 0 var(--color-gray);
 }

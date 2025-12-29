@@ -1,16 +1,28 @@
 {
-  "extends": "airbnb-base",
-  "env": {
-     "es6": true,
-     "browser": true,
-     "jest": true
-  },
-  "rules": {
-    "no-restricted-syntax": [
-      "error",
-      "LabeledStatement",
-      "WithStatement"
-    ],
-    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }]
+    "plugins": ["prettier"],
+    "extends": ["eslint:recommended", "plugin:prettier/recommended"],
+    "env": {
+      "es6": true,
+      "browser": true,
+      "node": true
+    },
+    "globals": {
+      "$": true,
+      "require": true,
+      "process": true
+    },
+    "parserOptions": {
+      "sourceType": "module",
+      "ecmaVersion": 8
+    },
+    "rules": {
+      "no-unused-vars": "warn",
+      "prettier/prettier": [
+        "error",
+        { "singleQuote": true,
+          "endOfLine": "auto" 
+        }
+       
+      ]     
+    }
   }
-}

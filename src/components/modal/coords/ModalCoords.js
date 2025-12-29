@@ -48,7 +48,7 @@ export default class ModalCoords extends Modal {
 
     // Регулярка: допускает [xx.xxxxx, yy.yyyyy] или xx.xxxxx, yy.yyyyy
     const match = value.match(
-      /^[\[\s]*(-?\d{1,2}\.\d{5,})\s*,\s*(-?\d{1,2}\.\d{5,})[\]\s]*$/
+      /^[[\s]*(-?\d{1,2}\.\d{5,})\s*,\s*(-?\d{1,2}\.\d{5,})[\]\s]*$/
     );
     if (!match) {
       this.#showError('Неверный формат');
